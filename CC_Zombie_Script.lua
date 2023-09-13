@@ -9,6 +9,17 @@ while true do
   local _, senderID, _, _, _, message = os.pullEvent("modem_message")
   if senderID and message and senderID ~= ownID then
     -- Execute standard ComputerCraft commands received from the central server
-    shell.run(message)
+    local success, output = pcall(function()
+      return shell.run(message)
+    end)
+
+    -- Display the output locally on the remote computer
+    term.clear()
+    term.setCursorPos(1, 1)
+    print("Output of Command:")
+    print(output)
+
+    -- Optionally, you can add a delay before clearing the output and resuming listening for commands
+    sleep(5) -- Adjust the delay time as needed
   end
 end
