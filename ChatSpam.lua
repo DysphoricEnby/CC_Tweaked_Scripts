@@ -19,20 +19,22 @@ local function generateRandomName()
 end
 
 -- Initialize the Wired modem on each remote computer
-rednet.open("back") -- Change the side as needed
+rednet.open("top") -- Change the side as needed
 
 -- Generate a random chat name for this computer
 local chatName = generateRandomName()
-
--- Broadcast a message indicating the computer has joined the chat
-rednet.send(chatHostname, chatName .. " has joined the chat.")
 
 -- Main loop for chatting
 while true do
   local senderID, message, protocol = rednet.receive()
   if senderID and message then
-    -- Print the received message with the sender's chat name
-    local senderName = generateRandomName() -- Generate a random sender name for privacy
-    print(senderName .. " (" .. senderID .. "): " .. message)
+    -- Check if the message is intended for this chat
+    local prefix = chatHostname .. " "
+    if message:sub(1, #prefix) == prefix then
+      -- Extract and print the chat message
+      local senderName = generateRandomName() -- Generate a random sender name for privacy
+      local chatMessage = message:sub(#prefix + 1)
+      print(senderName .. " (" .. senderID .. "): " .. chatMessage)
+    end
   end
 end
