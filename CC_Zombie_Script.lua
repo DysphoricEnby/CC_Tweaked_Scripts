@@ -14,12 +14,10 @@ while true do
     end)
 
     -- Display the output locally on the remote computer
-    term.clear()
-    term.setCursorPos(1, 1)
     print("Output of Command:")
     print(output)
 
-    -- Optionally, you can add a delay before clearing the output and resuming listening for commands
+    -- Optionally, you can add a sleep time to introduce a delay before listening for the next command
     sleep(5) -- Adjust the delay time as needed
   end
 end
