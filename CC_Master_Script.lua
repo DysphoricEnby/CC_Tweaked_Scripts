@@ -1,5 +1,18 @@
 -- Initialize the Wired modem on the master computer
-peripheral.find("modem").open(1) -- Change the side (1) as needed
+rednet.open("back") -- Change the side as needed
+
+-- Define the IDs of the 293 remote computers
+local computerIDs = {}
+for i = 1, 293 do
+  table.insert(computerIDs, i)
+end
+
+-- Define a function to send a command to multiple remote computers
+local function sendCommandToAll(command)
+  for _, computerID in ipairs(computerIDs) do
+    rednet.send(computerID, command)
+  end
+end
 
 -- Main loop for command input
 while true do
@@ -14,12 +27,7 @@ while true do
   if choice == "1" then
     io.write("Enter command to send to all computers: ")
     local command = io.read()
-    
-    -- Broadcast the command to all computers on the network
-    peripheral.find("modem").open(1) -- Open the modem on the appropriate side
-    peripheral.find("modem").transmit(65535, os.getComputerID(), command) -- 65535 is the broadcast address
-    peripheral.find("modem").close(1) -- Close the modem
-    
+    sendCommandToAll(command)
     print("Command sent to all computers.")
     sleep(2)
   elseif choice == "Q" or choice == "q" then
@@ -28,4 +36,4 @@ while true do
 end
 
 -- Close the Wired modem when done
-peripheral.find("modem").close(1)
+rednet.close("back")
