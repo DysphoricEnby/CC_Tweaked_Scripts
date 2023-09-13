@@ -3,7 +3,7 @@ local args = { ... }
 local chatHostname = args[1]
 
 if not chatHostname then
-  print("Usage: ChatSpam.lua <chat_hostname>")
+  print("Usage: chat.lua <chat_hostname>")
   return
 end
 
@@ -19,14 +19,13 @@ local function generateRandomName()
 end
 
 -- Initialize the Wired modem on each remote computer
-rednet.open("top") -- Change the side as needed
+rednet.open("back") -- Change the side as needed
 
 -- Generate a random chat name for this computer
 local chatName = generateRandomName()
 
--- Join the chat using the provided hostname and random name
-rednet.chat(chatHostname)
-rednet.broadcast(chatName .. " has joined the chat.")
+-- Broadcast a message indicating the computer has joined the chat
+rednet.send(chatHostname, chatName .. " has joined the chat.")
 
 -- Main loop for chatting
 while true do
