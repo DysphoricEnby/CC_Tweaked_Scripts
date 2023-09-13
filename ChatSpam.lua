@@ -24,17 +24,24 @@ rednet.open("back") -- Change the side as needed
 -- Generate a random chat name for this computer
 local chatName = generateRandomName()
 
+-- Function to send a chat message to the specified chat
+local function sendChatMessage(chat, message)
+  local encodedMessage = textutils.serialize({sender = chatName, message = message})
+  rednet.send(chat, encodedMessage)
+end
+
 -- Main loop for chatting
 while true do
   local senderID, message, protocol = rednet.receive()
   if senderID and message then
-    -- Check if the message is intended for this chat
-    local prefix = chatHostname .. " "
-    if message:sub(1, #prefix) == prefix then
-      -- Extract and print the chat message
-      local senderName = generateRandomName() -- Generate a random sender name for privacy
-      local chatMessage = message:sub(#prefix + 1)
-      print(senderName .. " (" .. senderID .. "): " .. chatMessage)
+    -- Deserialize the received message
+    local data = textutils.unserialize(message)
+    if data and data.message and data.sender then
+      -- Check if the message is intended for this chat
+      if data.chat == chatHostname then
+        -- Print the chat message with sender's name
+        print(data.sender .. " (" .. senderID .. "): " .. data.message)
+      end
     end
   end
 end
