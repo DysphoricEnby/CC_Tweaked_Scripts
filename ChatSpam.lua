@@ -19,7 +19,7 @@ local function generateRandomName()
 end
 
 -- Initialize the Wired modem on each remote computer
-rednet.open("top") -- Change the side as needed
+rednet.open("back") -- Change the side as needed
 
 -- Generate a random chat name for this computer
 local chatName = generateRandomName()
