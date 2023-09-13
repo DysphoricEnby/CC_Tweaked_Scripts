@@ -1,7 +1,7 @@
 -- List of files to copy to the root directory
 local filesToCopy = {
-  "disk/startup.file",
-  "disk/ChatSpam.lua", -- Add any other files you want to copy here
+  { source = "disk/startup.file", destination = "startup" },
+  { source = "disk/ChatSpam.lua", destination = "ChatSpam.lua" }, -- Add any other files you want to copy here
 }
 
 -- Function to copy a file
@@ -22,8 +22,7 @@ end
 
 -- Copy the specified files to the root directory
 for _, file in ipairs(filesToCopy) do
-  local fileName = fs.getName(file)
-  copyFile(file, fileName)
+  copyFile(file.source, file.destination)
 end
 
 -- Run the new "startup" file
